@@ -253,51 +253,44 @@ void display7SEG(int num) {
    HAL_GPIO_WritePin(SEG6_GPIO_Port, SEG6_Pin, segCode[num][6]);
   }
 
+const int MAX_LED = 4;
+int index_led = 0;
+int led_buffer[4] = {1, 2, 3, 4};
 
-int counter = 50;
-int countDot = 100;
-int flag = 0;
-
-void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef *htim)
-{
+void update7SEG(int index) {
     HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, SET);
     HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET);
     HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, SET);
     HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, SET);
 
-    switch(flag) {
+    switch (index) {
         case 0:
             HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, RESET);
-            display7SEG(1);
+            display7SEG(led_buffer[0]);
             break;
         case 1:
             HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, RESET);
-            display7SEG(2);
+            display7SEG(led_buffer[1]);
             break;
         case 2:
             HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, RESET);
-            display7SEG(3);
+            display7SEG(led_buffer[2]);
             break;
         case 3:
             HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, RESET);
-            display7SEG(0);
+            display7SEG(led_buffer[3]);
+            break;
+        default:
             break;
     }
+}
 
-    counter--;
-    countDot--;
 
-    if(counter <= 0) {
-        counter = 50;
-        flag++;
-        if(flag == 4) flag = 0;
-        HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
-    }
-
-    if(countDot <= 0) {
-        countDot = 100;
-        HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
-    }
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+    update7SEG(index_led);
+    index_led++;
+    HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
+    if (index_led >= MAX_LED) index_led = 0;
 }
 
 /* USER CODE END 4 */
