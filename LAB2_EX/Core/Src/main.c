@@ -252,16 +252,25 @@ void display7SEG(int num) {
 
 
 int counter = 50;
-int flag = 1;
+int flag = 0;
 void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim )
 {
-   if (flag == 1) display7SEG(1);
-   else if (flag == 2) display7SEG(2);
+   if (flag == 0) {
+	   HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, RESET);
+	   HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET);
+	   display7SEG(1);
+   }
+   if (flag == 1) {
+   	   HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, SET);
+   	   HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, RESET);
+   	   display7SEG(2);
+      }
+
    counter--;
    if( counter <= 0) {
       counter = 50;
-      if (flag == 1) flag = 2;
-      else if (flag == 2) flag = 1;
+      if (flag == 0) flag = 1;
+      else flag = 0;
       HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
    }
 }
