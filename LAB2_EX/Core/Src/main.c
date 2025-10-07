@@ -230,12 +230,8 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 
 #define MAX_LED 4
-#define TIMER_FREQ_HZ 100
-#define DOT_TICKS_PER_SEC TIMER_FREQ_HZ
-
 int index_led = 0;
 uint8_t led_buffer[MAX_LED] = {1, 2, 3, 4};
-int dot_counter = 0;
 
 
 void display7SEG(int num) {
@@ -291,12 +287,11 @@ void update7SEG(int index) {
 }
 
 
+int led_counter = 0;
+int dot_counter = 0;
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
     if (htim->Instance != TIM2) return;
-
-    static int led_counter = 50;
-    static int dot_counter = 100;
 
     led_counter--;
     dot_counter--;
