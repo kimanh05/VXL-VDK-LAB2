@@ -297,7 +297,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
     dot_counter--;
 
     if (led_counter <= 0) {
-        led_counter = 50;
+        led_counter = 25;
         update7SEG(index_led);
         index_led++;
         if (index_led >= MAX_LED) index_led = 0;
