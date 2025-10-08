@@ -62,6 +62,18 @@ uint8_t matrix_buffer[8] = {
   0b00000000
 };
 
+uint8_t A[8] = {
+		  0b00000000,
+		  0b11111100,
+		  0b00001010,
+		  0b00001001,
+		  0b00001001,
+		  0b00001010,
+		  0b11111100,
+		  0b00000000
+};
+
+int offset = 0;
 
 
 /* USER CODE END PV */
@@ -75,6 +87,8 @@ void display7SEG(int num);
 void update7SEG(int index);
 void updateClockBuffer(void);
 void updateLEDMatrix(int index);
+void updateMatrixBuffer(void);
+void shiftLeftMatrix(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -123,6 +137,7 @@ int main(void)
   setTimer2(50);
   setTimer3(50);
   setTimer4(10);
+  setTimer5(80);
 
   while (1)
   {
@@ -161,8 +176,15 @@ int main(void)
 	          setTimer4(10);
 	          updateLEDMatrix(index_led_matrix);
 	          index_led_matrix++;
-	          if (index_led_matrix >= MAX_LED_MATRIX) index_led_matrix = 0;
+	          if (index_led_matrix >= 8)
+	              index_led_matrix = 0;
 	      }
+
+	      if (timer5_flag == 1) {
+	          setTimer5(80);
+	          shiftLeftMatrix();
+	      }
+
 
 
     /* USER CODE END WHILE */
@@ -356,6 +378,19 @@ void updateClockBuffer(void) {
     led_buffer[3] = minute % 10;
 }
 
+void updateMatrixBuffer(void) {
+    for (int i = 0; i < 8; i++) {
+        int srcIndex = i + offset;
+        if (srcIndex < 8)
+            matrix_buffer[i] = A[srcIndex];
+        else
+            matrix_buffer[i] = 0b00000000;
+    }
+
+    offset++;
+    if (offset > 8) offset = 0;
+}
+
 
 void updateLEDMatrix(int index) {
     if (index < 0 || index >= MAX_LED_MATRIX) return;
@@ -385,6 +420,21 @@ void updateLEDMatrix(int index) {
         case 7: HAL_GPIO_WritePin(ENM7_GPIO_Port, ENM7_Pin, GPIO_PIN_RESET); break;
     }
 }
+
+void shiftLeftMatrix(void) {
+    for (int i = 0; i < 7; i++) {
+        matrix_buffer[i] = matrix_buffer[i + 1];
+    }
+
+    if (offset < 8)
+        matrix_buffer[7] = A[offset];
+    else
+        matrix_buffer[7] = 0x00;
+
+    offset++;
+    if (offset > 8) offset = 0;
+}
+
 
 
 
