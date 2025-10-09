@@ -53,24 +53,24 @@ const int MAX_LED_MATRIX = 8;
 int index_led_matrix = 0;
 uint8_t matrix_buffer[8] = {
 		  0b00000000,
-		  0b00000000,
-		  0b11111110,
+		  0b11111100,
+		  0b00001010,
 		  0b00001001,
 		  0b00001001,
-		  0b11111110,
-		  0b00000000,
+		  0b00001010,
+		  0b11111100,
 		  0b00000000
 
 };
 
 uint8_t A[8] = {
 		  0b00000000,
-		  0b00000000,
-		  0b11111110,
+		  0b11111100,
+		  0b00001010,
 		  0b00001001,
 		  0b00001001,
-		  0b11111110,
-		  0b00000000,
+		  0b00001010,
+		  0b11111100,
 		  0b00000000
 
 };
@@ -135,9 +135,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   updateClockBuffer();
 
-  setTimer1(50);
+  setTimer1(25);
   setTimer2(50);
-  setTimer3(50);
+  setTimer3(100);
   setTimer4(10);
   setTimer5(80);
 
@@ -145,7 +145,7 @@ int main(void)
   {
 
 	  if (timer1_flag == 1) {
-	          setTimer1(50);
+	          setTimer1(25);
 	          update7SEG(index_led);
 	          index_led++;
 	          if (index_led >= MAX_LED) index_led = 0;
@@ -423,6 +423,9 @@ void updateLEDMatrix(int index) {
     }
 }
 
+
+
+
 void shiftRightMatrix(void) {
     for (int i = 7; i > 0; i--) {
         matrix_buffer[i] = matrix_buffer[i - 1];
@@ -435,9 +438,9 @@ void shiftRightMatrix(void) {
 
     offset++;
     if (offset > 8) offset = 0;
+
+
 }
-
-
 
 
 

@@ -119,14 +119,14 @@ int main(void)
   updateClockBuffer();
  8000166:	f000 fa41 	bl	80005ec <updateClockBuffer>
 
-  setTimer1(50);
- 800016a:	2032      	movs	r0, #50	; 0x32
+  setTimer1(25);
+ 800016a:	2019      	movs	r0, #25
  800016c:	f000 fb84 	bl	8000878 <setTimer1>
   setTimer2(50);
  8000170:	2032      	movs	r0, #50	; 0x32
  8000172:	f000 fb95 	bl	80008a0 <setTimer2>
-  setTimer3(50);
- 8000176:	2032      	movs	r0, #50	; 0x32
+  setTimer3(100);
+ 8000176:	2064      	movs	r0, #100	; 0x64
  8000178:	f000 fba6 	bl	80008c8 <setTimer3>
   setTimer4(10);
  800017c:	200a      	movs	r0, #10
@@ -143,8 +143,8 @@ int main(void)
  800018a:	681b      	ldr	r3, [r3, #0]
  800018c:	2b01      	cmp	r3, #1
  800018e:	d113      	bne.n	80001b8 <main+0x6c>
-	          setTimer1(50);
- 8000190:	2032      	movs	r0, #50	; 0x32
+	          setTimer1(25);
+ 8000190:	2019      	movs	r0, #25
  8000192:	f000 fb71 	bl	8000878 <setTimer1>
 	          update7SEG(index_led);
  8000196:	4b39      	ldr	r3, [pc, #228]	; (800027c <main+0x130>)
@@ -1070,6 +1070,9 @@ void updateLEDMatrix(int index) {
 
 080007e0 <shiftRightMatrix>:
 
+
+
+
 void shiftRightMatrix(void) {
  80007e0:	b480      	push	{r7}
  80007e2:	b083      	sub	sp, #12
@@ -1131,6 +1134,8 @@ void shiftRightMatrix(void) {
  800083c:	4b04      	ldr	r3, [pc, #16]	; (8000850 <shiftRightMatrix+0x70>)
  800083e:	2200      	movs	r2, #0
  8000840:	601a      	str	r2, [r3, #0]
+
+
 }
  8000842:	bf00      	nop
  8000844:	370c      	adds	r7, #12
@@ -1142,8 +1147,6 @@ void shiftRightMatrix(void) {
  8000854:	20000018 	.word	0x20000018
 
 08000858 <HAL_TIM_PeriodElapsedCallback>:
-
-
 
 
 
