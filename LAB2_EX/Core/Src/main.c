@@ -52,25 +52,27 @@ uint8_t led_buffer[MAX_LED] = {1, 2, 3, 4};
 const int MAX_LED_MATRIX = 8;
 int index_led_matrix = 0;
 uint8_t matrix_buffer[8] = {
-  0b00000000,
-  0b11111100,
-  0b00001010,
-  0b00001001,
-  0b00001001,
-  0b00001010,
-  0b11111100,
-  0b00000000
+		  0b00000000,
+		  0b00000000,
+		  0b11111110,
+		  0b00001001,
+		  0b00001001,
+		  0b11111110,
+		  0b00000000,
+		  0b00000000
+
 };
 
 uint8_t A[8] = {
 		  0b00000000,
-		  0b11111100,
-		  0b00001010,
+		  0b00000000,
+		  0b11111110,
 		  0b00001001,
 		  0b00001001,
-		  0b00001010,
-		  0b11111100,
+		  0b11111110,
+		  0b00000000,
 		  0b00000000
+
 };
 
 int offset = 0;
@@ -88,7 +90,7 @@ void update7SEG(int index);
 void updateClockBuffer(void);
 void updateLEDMatrix(int index);
 void updateMatrixBuffer(void);
-void shiftLeftMatrix(void);
+void shiftRightMatrix(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -182,7 +184,7 @@ int main(void)
 
 	      if (timer5_flag == 1) {
 	          setTimer5(80);
-	          shiftLeftMatrix();
+	          shiftRightMatrix();
 	      }
 
 
@@ -421,19 +423,20 @@ void updateLEDMatrix(int index) {
     }
 }
 
-void shiftLeftMatrix(void) {
-    for (int i = 0; i < 7; i++) {
-        matrix_buffer[i] = matrix_buffer[i + 1];
+void shiftRightMatrix(void) {
+    for (int i = 7; i > 0; i--) {
+        matrix_buffer[i] = matrix_buffer[i - 1];
     }
 
     if (offset < 8)
-        matrix_buffer[7] = A[offset];
+        matrix_buffer[0] = A[7 - offset];
     else
-        matrix_buffer[7] = 0x00;
+        matrix_buffer[0] = 0x00;
 
     offset++;
     if (offset > 8) offset = 0;
 }
+
 
 
 
